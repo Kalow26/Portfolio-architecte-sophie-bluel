@@ -45,7 +45,6 @@ export const displayAddPhotosModal = (savebar, modal) => {
   .addEventListener("click", () => displayGalleryModal(modal, savebar));
     const catList = document.querySelector("#cat");
     categories.forEach((cat) => {
-        console.log(cat);
       const option = document.createElement("option");
       option.innerHTML = `<option value="${cat.id}">${cat.name}</option>`;
       catList.appendChild(option);
@@ -53,12 +52,14 @@ export const displayAddPhotosModal = (savebar, modal) => {
   
     const validateButton = document.querySelector(".btn--validate");
   
-    validateButton.addEventListener("click", () => {
-      let catIndex = categories.findIndex((cat) => cat.name === catList.value);
+    validateButton.addEventListener("click", (event) => {
+      event.preventDefault()
+      let catIndex = categories.findIndex((cat) => cat.name === catList.value)+1;
+      console.log(catIndex)
       let titleValue = document.querySelector("#title").value;
       let imageValue = document.querySelector("#file").files[0];
   
-      if (catIndex >= 0 && titleValue && imageValue) {
+      if (catIndex && titleValue && imageValue) {
         postNewProjectData(catIndex, titleValue, imageValue);
       } else {
         console.log("fill the fields");

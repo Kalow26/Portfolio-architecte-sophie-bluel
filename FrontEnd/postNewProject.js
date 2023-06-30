@@ -1,4 +1,5 @@
 export const postNewProjectData = async (index, title, imageFile) => {
+  console.log(index, title, imageFile)
   const url = "http://localhost:5678/api/works";
   const token = sessionStorage.getItem("token");
   const formData = new FormData();

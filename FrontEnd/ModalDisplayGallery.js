@@ -30,7 +30,7 @@ export const displayGalleryModal = (modal, savebar) => {
     works.forEach((work) => {
       const figure = document.createElement("figure");
       figure.innerHTML = `
-                            <img src="${work.imageUrl}" alt="${work.title}">
+                            <img src="${work.imageUrl}" alt="${work.title} class="gallery__image__caption" name="${work.id}">
                             <div class="pictures__container__icons">
                               <i class="fa-solid fa-arrows-up-down-left-right"></i>	
                               <i class="fa-solid fa-trash-can" name="${work.id}"></i>
@@ -41,13 +41,43 @@ export const displayGalleryModal = (modal, savebar) => {
     });
     closeModal(savebar, modal);
     const deleteicon = document.querySelectorAll(".fa-trash-can");
+    const imageCaption = document.querySelectorAll(".gallery__image__caption");
+    const selectedItem = [];
     deleteicon.forEach ((icon) => {
       
       icon.addEventListener ("click", (e) => {
         e.preventDefault();
-        const name = icon.getAttribute("name");
-        deleteProject(name);
+        const name = icon.parentNode.previousElementSibling.getAttribute("name");
+
+        // Check if the work.id is already in the selectedItem array
+    const index = selectedItem.indexOf(name);
+    if (index === -1) {
+      // If not present, add it to the array
+      selectedItem.push(name);
+      console.log(selectedItem)
+    } else {
+      // If already present, remove it from the array
+      selectedItem.splice(index, 1);
+      console.log(selectedItem)
+    }
+
+    // Apply opacity effect to the corresponding image
+    const image = document.querySelector(`img[name="${name}"]`);
+    if (image) {
+      image.classList.toggle("fade-out", index === -1);
+    }
       })
+
+    
+    })
+
+    const pusblishChangeButton = document.querySelector(".btn--savechange");
+    pusblishChangeButton.addEventListener("click", () => {
+      if (selectedItem.length >=1 ) {
+        selectedItem.forEach ((elem) => {
+          deleteProject(elem);
+        })
+      }
     })
 
 
