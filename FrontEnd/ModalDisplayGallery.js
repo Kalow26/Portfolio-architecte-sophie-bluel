@@ -1,7 +1,8 @@
-import { closeModal } from "./closeModal.js";
+import { closeModal, closeModalHandler } from "./closeModal.js";
 import { displayAddPhotosModal } from "./modalAddProject.js";
 import { works } from "./app.js";
 import { deleteProject } from "./deleteProject.js";
+import { getDatas } from "./app.js";
 
 
 
@@ -41,7 +42,6 @@ export const displayGalleryModal = (modal, savebar) => {
     });
     closeModal(savebar, modal);
     const deleteicon = document.querySelectorAll(".fa-trash-can");
-    const imageCaption = document.querySelectorAll(".gallery__image__caption");
     const selectedItem = [];
     deleteicon.forEach ((icon) => {
       
@@ -59,12 +59,21 @@ export const displayGalleryModal = (modal, savebar) => {
       // If already present, remove it from the array
       selectedItem.splice(index, 1);
       console.log(selectedItem)
+      
     }
 
     // Apply opacity effect to the corresponding image
     const image = document.querySelector(`img[name="${name}"]`);
     if (image) {
-      image.classList.toggle("fade-out", index === -1);
+      if (index === -1) {
+        image.style.transition = "opacity 0.5s ease";
+        image.style.opacity = "0.2";
+        
+      } else {
+        image.style.transition = "opacity 0.5s ease";
+        image.style.opacity = "1";
+        
+      }
     }
       })
 
@@ -72,16 +81,24 @@ export const displayGalleryModal = (modal, savebar) => {
     })
 
     const pusblishChangeButton = document.querySelector(".btn--savechange");
-    pusblishChangeButton.addEventListener("click", () => {
-      if (selectedItem.length >=1 ) {
-        selectedItem.forEach ((elem) => {
+    const publishChangeListener = () => {
+      if (selectedItem.length >= 1) {
+        selectedItem.forEach((elem) => {
           deleteProject(elem);
-        })
+        });
+        getDatas();
+        closeModalHandler(savebar, modal);
       }
-    })
+    };
+
+    pusblishChangeButton.addEventListener("click", publishChangeListener)
+    
 
 
     document
   .querySelector(".btn--addphoto")
-  .addEventListener("click", () => displayAddPhotosModal(savebar, modal));
-  };
+  .addEventListener("click", () => {
+    pusblishChangeButton.removeEventListener("click", publishChangeListener);
+    displayAddPhotosModal(savebar, modal);
+  }
+  )};

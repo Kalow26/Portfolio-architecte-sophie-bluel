@@ -1,3 +1,6 @@
+import { getDatas } from "./app.js";
+
+
 export const postNewProjectData = async (index, title, imageFile) => {
   console.log(index, title, imageFile)
   const url = "http://localhost:5678/api/works";
@@ -17,7 +20,7 @@ export const postNewProjectData = async (index, title, imageFile) => {
       body: formData,
     });
     const res = await postProject.json();
-    console.log(res);
+    getDatas()
   } catch (e) {
     console.error("error", e);
   }

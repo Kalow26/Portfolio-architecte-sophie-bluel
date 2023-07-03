@@ -317,8 +317,8 @@ select {
 }
 
 .fade-out {
-	opacity: 0.3;
-	transition: opacity 0.3s ease;
+	opacity: 0.5;
+	transition: opacity 0.5s ease-in-out;
 }
 
 /* modal */

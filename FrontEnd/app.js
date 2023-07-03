@@ -4,14 +4,29 @@ import { displayAddPhotosModal } from "./modalAddProject.js";
 const saveBar = document.querySelector(".save__bar");
 const modal = document.querySelector(".modal");
 const loginBtn = document.querySelector(".login_btn");
+const modifyBtn = document.querySelector(".modify__btn");
 loginBtn.href = "./loggin.html";
 
 export let works = [];
 export let categories = [];
 
+export const getDatas = async () => {
+  try {
+    const resCat = await fetch("http://localhost:5678/api/categories");
+    categories = await resCat.json();
+    const resWorks = await fetch("http://localhost:5678/api/works");
+    works = await resWorks.json();
+    createFilterButtons(categories, works);
+    createGallery(works);
+  } catch (error) {
+    console.error("Fail to fetch datas : ", error);
+  }
+};
+
 getDatas();
 
 const displayModalContent = () => {
+  console.log("click");
   saveBar.style.display = "block";
   modal.style.display = "flex";
 
@@ -23,15 +38,20 @@ const displayModalContent = () => {
 };
 
 const isLogged = () => {
-  loginBtn.innerText = "Logout";
-  loginBtn.href = "#";
-  loginBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("id");
-    loggin();
-    // Update the href attribute to point to the login page
-  });
+  if (isToken) {
+    modifyBtn.style.display = "inline-block";
+    modifyBtn.addEventListener("click", () => displayModalContent());
+
+    loginBtn.innerText = "Logout";
+    loginBtn.href = "#";
+    loginBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("id");
+      modifyBtn.style.display = "none";
+      loggin();
+    });
+  }
 };
 
 const loggin = () => {
@@ -44,31 +64,12 @@ const loggin = () => {
 
 const isToken = sessionStorage.getItem("token");
 
-if (isToken) {
-  isLogged();
-
-  const modifyBtn = document.querySelector(".modify__btn");
-  modifyBtn.style.display = "inline-block";
-
-  modifyBtn.addEventListener("click", () => displayModalContent());
-}
-
-async function getDatas() {
-  try {
-    const resCat = await fetch("http://localhost:5678/api/categories");
-    categories = await resCat.json();
-    const resWorks = await fetch("http://localhost:5678/api/works");
-    works = await resWorks.json();
-    createFilterButtons(categories, works);
-    createGallery(works);
-  } catch (error) {
-    console.error("Fail to fetch datas : ", error);
-  }
-}
+isLogged();
 
 const createFilterButtons = (categories, works) => {
   const allButton = document.createElement("button");
   const filterButtonsContainer = document.getElementById("filter__btn");
+  filterButtonsContainer.innerHTML = "";
   allButton.innerText = "Tous";
   allButton.classList.add("btn");
   filterButtonsContainer.appendChild(allButton);
