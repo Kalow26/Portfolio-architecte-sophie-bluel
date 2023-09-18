@@ -4,8 +4,6 @@ import { works } from "./app.js";
 import { deleteProject } from "./deleteProject.js";
 import { getDatas } from "./app.js";
 
-
-
 const modalGallery = `<div class="modal__content">
                         <i class="fa-solid fa-xmark"></i>
                         <div class="modal__content__container">
@@ -17,11 +15,6 @@ const modalGallery = `<div class="modal__content">
                           <a href="#" class="btn--deletegallery">Supprimer la galerie</a>
                         </div>
                         </div>`;
-
-
-
-
-
 
 
 export const displayGalleryModal = (modal, savebar) => {

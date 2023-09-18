@@ -101,7 +101,6 @@ export const displayAddPhotosModal = (savebar, modal) => {
   };
 
   const previewModalPicture = (e) => {
-    console.log("je marche")
     const image = document.getElementById("preview");
     const [picture] = e.target.files;
     const types = ["image/jpg", "image/jpeg", "image/png"];
